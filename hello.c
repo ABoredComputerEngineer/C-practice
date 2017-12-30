@@ -1,3 +1,4 @@
+//FUCK THISSSSSSS
 #include <stdio.h>
 #define HEADING_TEXT "::::   A TABLE OF POWERS   ::::"
 unsigned long int power(float,int);
