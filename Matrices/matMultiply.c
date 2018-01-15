@@ -33,8 +33,8 @@ void main(){
 
 
 	// THE MULTIPLICATION BEGINS HERE
-	if ( rowA == colB && colA == rowB){
-		rowC = colC = rowA;
+	if ( colA == rowB ){
+		rowC = rowA,colC = colB;
 		for( i = 0; i<rowC; i++)
 			for( j = 0; j<colC; j++)
 				for( k = 0; k<rowB; k++)     	//The first 'new' part
