@@ -35,14 +35,13 @@ void insertionSort(int a[],int length){
 	for( i = 0;i<length;i++)		//PRINTS THE UPPER MENU OF INDEXES
 		printf("Index %d|",i);
 	printf("\n");
-	
-	//START OF THE BUBBLE SORT
+
 	for ( i=0; i<length-1;i++){
 			minIndex = i;
 			LONGLINE;
 		for ( j = i+1; j<length; j++){
-			// if ( checkSort(a,length) == TRUE ) // CHECK IF SORTED BEFORE EACH SWAP
-			// 	return;
+			if ( checkSort(a,length) == TRUE ) // CHECK IF SORTED BEFORE EACH SWAP
+				return;
 			if ( a[j]<a[minIndex]){
 				minIndex = j;
 			}
