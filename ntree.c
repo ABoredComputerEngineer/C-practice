@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define TRUE 1
 #define FALSE 0
-#define MAX_CHILD 5 // The max number of child nodes a  node will have
+#define MAX_CHILD 3 // The max number of child nodes a  node will have
 
 int Depth = 2;
 int randomValue = 0;
@@ -61,18 +61,27 @@ void generateTree( node *root , int depth ){
 		root->child[i] = newNode(getValue());
 		root->child[i]->parent = root;
 		// nodeCount++;
-		// depth++;
-		generateTree(root->child[i],depth+1);
-	} else if ( depth == Depth ) {		// if we have reached the maximum depth 
-		// depth--;
-		generateTree( root -> parent, depth+1 ); // move to the parent
-	} else if ( i == - 1 && checkChildren(root->parent) != -1 ){
-		// depth--;
-		generateTree( root -> parent,depth+1 );
+		depth++;
+		generateTree(root->child[i],depth);
+	} else if ( root->parent!=NULL ) {		// if we have reached the maximum depth 
+		if ( depth == Depth ){
+		depth--;
+		generateTree( root -> parent, depth ); // move to the parent
+			
+		} else if ( i == -1)  {
+			if ( checkChildren(root->parent) != -1 ){
+			depth--;
+			generateTree( root -> parent,depth );
+			}
+		}
+	}
+	// } else if ( i == - 1 && root->parent!=NULL ){
+		
+		
 	}
 
 
-}
+
 
 void printTree(node *root);
 
@@ -83,7 +92,7 @@ int main(){
 	// addNode(root,1,newNode(3));
 	// addNode(root,2,newNode(3));
 	// addNode(root->child[0],0,newNode(3));
-	generateTree( root );
+	generateTree( root , 0);
 	printf("%d\n",checkChildren(root));
 	//printf("%d\t%d\t%d\n",checkChildren(root->child[0]), root->child[0]->child[0]->child[0]->value,checkChildren(root));
 	printTree(root);	
