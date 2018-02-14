@@ -35,8 +35,8 @@ node *newNode( int value ){
 	return p;
 }
 
-void generateTree( node *root ){
-	static int depth = 0;//,nodeCount = 0;
+void generateTree( node *root , int depth ){
+	// static int depth = 0;//,nodeCount = 0;
 	// int n = 1,childIndex = 0,d = 0;
 	// node *p = root;
 	// while ( checkChildren(root) ) {
@@ -61,14 +61,14 @@ void generateTree( node *root ){
 		root->child[i] = newNode(getValue());
 		root->child[i]->parent = root;
 		// nodeCount++;
-		depth++;
-		generateTree(root->child[i]);
+		// depth++;
+		generateTree(root->child[i],depth+1);
 	} else if ( depth == Depth ) {		// if we have reached the maximum depth 
-		depth--;
-		generateTree( root -> parent ); // move to the parent
+		// depth--;
+		generateTree( root -> parent, depth+1 ); // move to the parent
 	} else if ( i == - 1 && checkChildren(root->parent) != -1 ){
-		depth--;
-		generateTree( root -> parent );
+		// depth--;
+		generateTree( root -> parent,depth+1 );
 	}
 
 
