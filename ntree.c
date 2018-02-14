@@ -1,62 +1,115 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_NODES 3
 #define TRUE 1
 #define FALSE 0
+#define MAX_CHILD 5 // The max number of child nodes a  node will have
 
-int NODE_NUMBER = 3;
+int Depth = 2;
+int randomValue = 0;
 typedef struct node {
-	int value;
+	int value; 
+	struct node *child[MAX_CHILD];
 	struct node *parent;
-	struct node *child[MAX_NODES];
 } node;
+
+int getValue(void){
+	return (randomValue+=1);
+}
+
+int checkChildren( node *root ){
+	int i;
+	for ( i = 0; i<MAX_CHILD ; i++ )
+		if ( root->child[i] == NULL )
+			return i;
+	return -1;
+}
 
 node *newNode( int value ){
 	node *p;
-	int i ;
-	p = malloc( sizeof( node ) );
+	int i;
+	p = malloc( sizeof(node) );
 	p->value = value;
-	for ( i = 0 ; i<NODE_NUMBER ; i++ )
+	for ( i = 0; i<MAX_CHILD ; i++ )
 		p->child[i] = NULL;
 	p->parent = NULL;
 	return p;
 }
 
-int checkChildList( node *head ){
+void generateTree( node *root ){
+	static int depth = 0;//,nodeCount = 0;
+	// int n = 1,childIndex = 0,d = 0;
+	// node *p = root;
+	// while ( checkChildren(root) ) {
+	// 		p->child[childIndex] = newNode( 3 );
+	// 		n++;
+	// 		p->child[childIndex]->parent = p;
+	// 		p = p->child[childIndex];
+	// 		d++;
+	// 		if ( d == depth ){
+	// 			p = p->parent;
+	// 			d--;
+	// 			childIndex = (childIndex+1) % 3;
+	// 		}
+	// 	printf("%d\t",n);
+	// }
 	int i;
-	for ( i = 0; i<NODE_NUMBER; i++ )
-		if ( head->child[i] == NULL )
-			return i;
-	return -1;
+	i = checkChildren(root);
+		// printf("%d\t%d\n",i,nodeCount);
+	if ( depth < Depth && i!=-1){ // if we have not reached the maximum depth and we can still add a node
+		// if ( i == -1 )
+		// 	return;
+		root->child[i] = newNode(getValue());
+		root->child[i]->parent = root;
+		// nodeCount++;
+		depth++;
+		generateTree(root->child[i]);
+	} else if ( depth == Depth ) {		// if we have reached the maximum depth 
+		depth--;
+		generateTree( root -> parent ); // move to the parent
+	} else if ( i == - 1 && checkChildren(root->parent) != -1 ){
+		depth--;
+		generateTree( root -> parent );
+	}
+
+
 }
 
-node *addNode ( node *head, node *new ){
-	static int pos=0;
-	int freeNode  = checkChildList( head );
-	if ( freeNode == -1 ){
-		return addNode( head->child[(pos++) % MAX_NODES], new);
-	} else {
-		new->parent = head;
-		return ( head->child[freeNode] = new );
-	}
-}
+void printTree(node *root);
 
 int main(){
 	node *root;
-	root = newNode( 0 );
-	addNode( root, newNode(3));
-	addNode( root, newNode(4));
-	addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-		addNode( root, newNode(5));
-	printf("\n%d\t%d\t%d\t%d\n",root->value,root->child[0]->value,root->child[1]->value,root->child[2]->value);
-	printf("\n%d\t%d\t%d\n",root->child[0]->child[0]->value,root->child[0]->child[1]->value, root->child[0]->child[2]->value);
+	root = newNode( 4 );
+	// addNode(root,0,newNode(3));
+	// addNode(root,1,newNode(3));
+	// addNode(root,2,newNode(3));
+	// addNode(root->child[0],0,newNode(3));
+	generateTree( root );
+	printf("%d\n",checkChildren(root));
+	//printf("%d\t%d\t%d\n",checkChildren(root->child[0]), root->child[0]->child[0]->child[0]->value,checkChildren(root));
+	printTree(root);	
+	// printf("\n%d\t%d\t%d\t%d\n",checkChildren(root),root->child[0]->value,root->child[0]->child[0]->value,root->child[0]->child[1]->value);
+	// printf("\n%d\t%d\t%d\t\n",root->child[0]->child[2]->value,root->child[1]->child[2]->value,root->child[2]->child[2]->value);
+	// printf("%d\t\n",checkChildren(root));
+	// generateTree( root );
+	// printf("%d\t%d\n",checkChildren(root),checkChildren(root->child[2]) );
+	// printf("%d\n",root->child[2]->value);
+	putchar('\n');
 	return 0;
 }
+
+void printTree( node *root ){
+	int i;
+	if ( root != NULL ){
+		for ( i = 0; i<MAX_CHILD; i++ ){
+			
+			printTree( root->child[i] );
+		}
+		// printTree( root->child[1] );
+		// printTree( root->child[2] );
+		// printTree( root->child[3] );
+		// printTree( root->child[4] );
+		printf("%d\t",root->value);
+		// printf( "%d\t",root->value);
+	}
+}
+
