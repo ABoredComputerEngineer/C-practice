@@ -3,13 +3,15 @@ double sine(float);
 double cosine(float);
 double exponential(float);
 double absolute(double);
+double pi(int); // int is the number of terms upto which the series is to be evaluated
 void main(){
 	float deg,rad,x;
 	printf("Enter angle in degrees and the value of x ");
 	scanf("%f%f",&deg,&x);
 	rad = deg*3.1415/180;
 	printf("The sine is %4.3lf and the cosine is %4.3lf\n",sine(rad),cosine(rad));
-	printf("The exponential of x = %3.2f is %4.6lf",x,exponential(x));
+	printf("The exponential of x = %3.2f is %4.6lf\n",x,exponential(x));
+	printf("The value of pi upto 25 terms is %3.6lf\n",pi(25));
 }
 
 double sine(float x){
@@ -50,5 +52,16 @@ double exponential(float x){
 		i++;
 	}
 	return sum;
+}
+
+double pi(int n){
+	int i = 0;
+	double sum=0,term = 1;
+	while ( i <= n ) {
+		sum += term;
+		i++;
+		term = (double)((i%2)?-1:1) / ( 2*i+1);
+	}
+	return sum*4.0;
 }
 	
