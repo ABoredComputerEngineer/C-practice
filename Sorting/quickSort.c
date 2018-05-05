@@ -1,37 +1,38 @@
 // CHANGE THE RANGE OF THE NUMBERS IN THE ARRAY BY CHANGING THE VALUE OF RANGE
-// CHANGE THE LENGTH OF THE ARRAY BY CHANGING THE VALUE OF LENGTH
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define LENGTH 8
 #define TRUE 1
 #define FALSE 0
 #define RANGE 100
 
 void printArray(int *,int);
 void swap(int *, int *); 
-void fillArray(int *);  //fills the array of LENGTH with random number which are then sorted
+void fillArray(int *, int);  //fills the array of arr_size with random number which are then sorted
 int split(int *, int, int);
 void quickSort(int *, int, int);
 int checkSort(int *,int); // returns TRUE if the array is sorted FALSE if it is not
-
+int arr_size;
 
 void main(){
-	int x[LENGTH],left=0,right=LENGTH-1,l,t;
-	int i,j;
+     int *x;
+//	int x[arr_size],left=0,right=arr_size-1,l,t;
 	srand(time(NULL));		//Required to generate random numbers
+     printf("Enter the amount of numbers you want to see sorted ::: ");
+     scanf("%d",&arr_size);
+     x = (int *)malloc(sizeof(int)*arr_size);
 
-	fillArray(x);
+	fillArray(x,arr_size);
 
 	printf("The initial array is \n");
-	printArray(x,LENGTH);
+	printArray(x,arr_size);
 	printf("---------------------SORTING BEGINS HERE-----------------------\n");
-	quickSort(x,0,LENGTH-1);
+	quickSort(x,0,arr_size-1);
 	
 	printf("\nThe sorted Array is \n");
-	printArray(x,LENGTH);
+	printArray(x,arr_size);
 
 	
 
@@ -39,7 +40,7 @@ void main(){
 
 void quickSort(int x[],int left, int right ){
 	int i ;
-	if ( right - left < 1 || checkSort(x,LENGTH) )
+	if ( right - left < 1 || checkSort(x,arr_size) )
 		return ;
 
 	i = split(x,left,right);
@@ -59,12 +60,12 @@ int split(int x[],int left, int right){
 	printf("\tThe splitter is %d\n",t);
 	for ( j = left; j < right ; j++ ){  // We only check from the leftmost element to the (right-1) element since the rightmost element holds the splitter element
 		if ( x[j] < t ){
-			printArray(x,LENGTH);
+			printArray(x,arr_size);
 			swap(&x[j],&x[i++]);
 		}
 	}
 	swap(&x[right],&x[i]); // Swaps the splitter from the rightmost position to it's real position in the sorted array
-	printArray(x,LENGTH);
+	printArray(x,arr_size);
 	count++;
 	return i;  // Returns the index of the splitter element
 }
@@ -84,8 +85,8 @@ void printArray(int *ip, int length){
 	printf("\n");
 }
 
-void fillArray(int *x){
-	for ( int i = 0; i<LENGTH; i++ )
+void fillArray(int *x, int length){
+	for ( int i = 0; i<length; i++ )
 		*(x+i) = rand()%RANGE;
 }
 
