@@ -6,7 +6,7 @@
 #define PQ_LENGTH 1000 // the maximum length of the queue
 #define LIMIT 100 // the maximum number of characters for input
 #define TABLE_SIZE 100 // the max index of the hash table
-#define parent(x) ( ( (x) == 0 )?-1:( ((x) - 1) / 2 ) )
+#define parent(x) ( ((x) - 1) / 2 ) 
 #define lchild(x) ( 2 * (x) + 1 )
 
 typedef struct {
@@ -31,6 +31,7 @@ void buildMaxHeap(priorityQueue *);
 void maxHeapify(priorityQueue *, int);
 void heapSort(priorityQueue );
 int extractMax(priorityQueue *);
+void insertHeap(priorityQueue *, int value);
 
 /* ... DICTIONARY / HASH TABLE RELATED FUNCTIONS .. */
 int hash(char *); // takes a string and produces a hash
@@ -51,7 +52,7 @@ int main(void){
 
      q1.arr = (int *)malloc(sizeof(int)*PQ_LENGTH);
      q1.length = 0;
-
+  
      do {
           getString(command);
           exit = readInput(command, &q1);
@@ -92,18 +93,29 @@ int extractMax(priorityQueue *new){
 
 }
 
-void heapSort(priorityQueue new ){
-     while ( new.length > 0 )
-          printf("%d\t",extractMax(&new) );
-
+void insertHeap(priorityQueue *new, int child){
+     if  ( child == 0 )
+          return;
      
+     if ( new->arr[child] > new->arr[parent(child)] ){
+          swap(&new->arr[child],&new->arr[parent(child)]);
+          insertHeap(new,parent(child));
+     } 
+
+     return;
+}
+
+void heapSort(priorityQueue new ){
+     buildMaxHeap(&new);
+     while ( new.length > 0 )
+          extractMax(&new); 
      return;
 }
 
 void enqueue(priorityQueue *new, int value){
      new->arr[new->length] = value;
      new->length++;
-     maxHeapify(new,parent(new->length));
+     insertHeap(new,(new->length-1));
      return;
 }
 
