@@ -46,7 +46,7 @@ int isDigit(char);
 
 int main(void){
      priorityQueue q1;
-     int i,exit;
+     int exit;
      char *command = (char *)malloc(sizeof(char) * LIMIT );
      srand(time(NULL));
 
@@ -137,8 +137,7 @@ int getString(char *x){
 }
 
 int strToInt(char *x){
-     int i = 0;
-     int multiplier = 1, num = 0, sign = 1, rev = 0;
+     int i = 0, num = 0, sign = 1;
 
      // removing preceding blanks
      while ( x[i] == ' ' )
@@ -153,11 +152,9 @@ int strToInt(char *x){
      while ( x[i] == '0' )  // remove preceding zeros 
           i++;
 
-     while ( ( x[i] != 0 ) && isDigit(x[i] ) ){
-          num = num * multiplier + ( x[i] - '0' ) ;
-          multiplier*=10; 
-          i++;
-     } 
+     while ( ( x[i] != 0 ) && isDigit(x[i] ) )
+          num = num * 10+ ( x[i++] - '0' ) ;
+      
      
      return sign*num;
 
@@ -189,6 +186,7 @@ int readInput(char *x, priorityQueue *new){
                heapSort(*new);
                break;
           case fill:
+               new->length = info;
                fillArray(new->arr,new->length);
                break;
           case show:
